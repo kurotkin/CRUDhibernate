@@ -1,15 +1,22 @@
 package model;
 
-import java.util.HashSet;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
  * Created by Vitaly on 19.11.2017.
  */
+@Entity
+@Table(name = "companies")
 public class Company {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
-    private Set<Project> projects = new HashSet<>();
 
     public Company() {
     }
@@ -22,7 +29,6 @@ public class Company {
     public Company(Long id, String name, Set<Project> projects) {
         this.id = id;
         this.name = name;
-        this.projects = projects;
     }
 
     public Company withId(Long id) {
@@ -32,11 +38,6 @@ public class Company {
 
     public Company withName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public Company withProjects(Set<Project> projects) {
-        this.projects = projects;
         return this;
     }
 
@@ -56,20 +57,10 @@ public class Company {
         this.name = name;
     }
 
-    public Set<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
-    }
-
     @Override
     public String toString() {
         return "Company{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", projects=" + projects +
-                '}';
+                ", name='" + name + '}';
     }
 }

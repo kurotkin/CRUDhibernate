@@ -1,10 +1,21 @@
 package model;
 
+import javax.persistence.*;
+
 /**
  * Created by Vitaly on 19.11.2017.
  */
+
+@Entity
+@Table(name = "skills")
 public class Skill {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
     private String name;
 
     public Skill() {

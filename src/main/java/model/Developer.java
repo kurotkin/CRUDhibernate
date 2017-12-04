@@ -1,5 +1,6 @@
 package model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,13 +8,48 @@ import java.util.Set;
 /**
  * Created by Vitaly on 19.11.2017.
  */
+
+@Entity
+@Table(name = "developers")
 public class Developer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "firstName", nullable = false)
     private String firstName;
+
+    @Column(name = "lastName", nullable = false)
     private String lastName;
+
+    @Column(name = "specialty", nullable = false)
     private String specialty;
+
+    @Column(name = "salary")
     private BigDecimal salary;
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH
+    }, fetch = FetchType.EAGER)
+    @JoinTable(name = "developers_skills",
+            joinColumns = { @JoinColumn(name = "developer_id") },
+            inverseJoinColumns = { @JoinColumn(name = "skill_id") }
+    )
     private Set<Skill> skills = new HashSet<>();
+
+
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH
+    })
+    @JoinColumn(name = "project_id")
     private Set<Project> projects = new HashSet<>();
 
 
