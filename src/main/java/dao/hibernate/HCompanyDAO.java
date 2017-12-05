@@ -12,7 +12,7 @@ import java.util.List;
 
 public class HCompanyDAO implements CompanyDAO {
 
-    SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     @Override
     public Company getById(Long id) {
@@ -25,7 +25,7 @@ public class HCompanyDAO implements CompanyDAO {
     @Override
     public List<Company> getAll() {
         Session session = this.sessionFactory.openSession();
-        Query query = session.createQuery("FROM Company");
+        Query query = session.createQuery("from Company");
         List<Company> result = query.list();
         session.close();
         return result;

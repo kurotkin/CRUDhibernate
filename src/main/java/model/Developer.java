@@ -14,14 +14,14 @@ import java.util.Set;
 public class Developer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "firstName", nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "lastName", nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Column(name = "specialty", nullable = false)
@@ -36,22 +36,17 @@ public class Developer {
             CascadeType.REFRESH,
             CascadeType.DETACH
     }, fetch = FetchType.EAGER)
-    @JoinTable(name = "developers_skills",
-            joinColumns = { @JoinColumn(name = "developer_id") },
-            inverseJoinColumns = { @JoinColumn(name = "skill_id") }
-    )
+    @JoinTable(name = "developer_skill", joinColumns = {@JoinColumn(name = "developer_id")}, inverseJoinColumns = { @JoinColumn(name = "skill_id")} )
     private Set<Skill> skills = new HashSet<>();
 
-
-    @ManyToOne(cascade = {
+    @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
             CascadeType.DETACH
-    })
-    @JoinColumn(name = "project_id")
+    }, fetch = FetchType.EAGER)
+    @JoinTable( name = "developer_projects", joinColumns = {@JoinColumn(name = "developer_id")}, inverseJoinColumns = {@JoinColumn(name = "projects_id")} )
     private Set<Project> projects = new HashSet<>();
-
 
 
     public Developer() {

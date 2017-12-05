@@ -1,20 +1,17 @@
 package dao.hibernate;
 
 import dao.CustomerDAO;
-import model.Company;
 import model.Customer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class HCustomerDAO implements CustomerDAO{
 
-    SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     @Override
     public Customer getById(Long id) {
@@ -27,7 +24,7 @@ public class HCustomerDAO implements CustomerDAO{
     @Override
     public List<Customer> getAll() {
         Session session = this.sessionFactory.openSession();
-        Query query = session.createQuery("FROM Customer");
+        Query query = session.createQuery("from Customer");
         List<Customer> result = query.list();
         session.close();
         return result;
@@ -56,6 +53,11 @@ public class HCustomerDAO implements CustomerDAO{
 
     @Override
     public void delete(Customer val) {
-
+        Session session = this.sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Customer customer = session.get(Customer.class, val.getId());
+        session.delete(customer);
+        transaction.commit();
+        session.close();
     }
 }

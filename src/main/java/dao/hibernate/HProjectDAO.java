@@ -1,20 +1,17 @@
 package dao.hibernate;
 
 import dao.ProjectDAO;
-import model.Developer;
 import model.Project;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class HProjectDAO implements ProjectDAO {
 
-    SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     @Override
     public Project getById(Long id) {
@@ -25,16 +22,16 @@ public class HProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public List<Project> getAll() throws SQLException {
+    public List<Project> getAll() {
         Session session = this.sessionFactory.openSession();
-        Query query = session.createQuery("FROM Project");
+        Query query = session.createQuery("from Project");
         List<Project> result = query.list();
         session.close();
         return result;
     }
 
     @Override
-    public void save(Project val) throws SQLException {
+    public void save(Project val) {
         Session session = this.sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(val);
@@ -43,12 +40,24 @@ public class HProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public void update(Project val) throws SQLException {
-
+    public void update(Project val) {
+        Session session = this.sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Project project = session.get(Project.class, val.getId());
+        project.setName(val.getName());
+        project.setCost(val.getCost());
+        session.update(project);
+        transaction.commit();
+        session.close();
     }
 
     @Override
-    public void delete(Project val) throws SQLException {
-
+    public void delete(Project val) {
+        Session session = this.sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Project project = session.get(Project.class, val.getId());
+        session.delete(project);
+        transaction.commit();
+        session.close();
     }
 }
