@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class Project {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -33,8 +33,7 @@ public class Project {
     public Project() {
     }
 
-    public Project(Long id, String name, BigDecimal cost) {
-        this.id = id;
+    public Project(String name, BigDecimal cost) {
         this.name = name;
         this.cost = cost;
     }

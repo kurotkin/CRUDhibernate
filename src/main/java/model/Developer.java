@@ -14,7 +14,7 @@ import java.util.Set;
 public class Developer {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -31,6 +31,7 @@ public class Developer {
     private BigDecimal salary;
 
     @ManyToMany(cascade = {
+            CascadeType.ALL,
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
@@ -40,6 +41,7 @@ public class Developer {
     private Set<Skill> skills = new HashSet<>();
 
     @ManyToMany(cascade = {
+            CascadeType.ALL,
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
@@ -52,12 +54,20 @@ public class Developer {
     public Developer() {
     }
 
-    public Developer(Long id, String firstName, String lastName, String specialty, BigDecimal salary) {
+    public Developer(String firstName, String lastName, String specialty, BigDecimal salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.specialty = specialty;
+        this.salary = salary;
+    }
+
+    public Developer(Long id, String firstName, String lastName, String specialty, BigDecimal salary, Set<Skill> skills) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.specialty = specialty;
         this.salary = salary;
+        this.skills = skills;
     }
 
     public Developer withId(Long id) {

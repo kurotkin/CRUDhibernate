@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public class Program {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 //        if (ConnectionUtil.USER.equals("") ||  ConnectionUtil.PASS.equals("")){
 //            throw new Exception("Введите имя пользователя и пароль в классе " + ConnectionUtil.class.getName());
 //        }
@@ -31,14 +31,15 @@ public class Program {
         ProjectDAO projectDAO = new HProjectDAO();
 
         //Developer
-        Developer dev1 = new Developer(100L, "Ivan", "Ivanov", "super user", new BigDecimal(4000));
+        Developer dev1 = new Developer("Ivan", "Ivanov", "super user", new BigDecimal(4000));
+
 
         Set<Project> projects1 = new HashSet<>();
-        projects1.add(new Project(50L, "New great project", new BigDecimal(999)));
+        projects1.add(new Project("New great project", new BigDecimal(999)));
         dev1.withProjects(projects1);
 
         Set<Skill> skills1 = new HashSet<>();
-        skills1.add(new Skill(40L, "brain"));
+        skills1.add(new Skill("brain"));
         dev1.withSkills(skills1);
 
         //Save
@@ -49,34 +50,36 @@ public class Program {
         }
 
         //Load
-//        try {
-//            Developer devFromMysql = devDAO.getById(100L);
-//            System.out.println(devFromMysql);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Developer devFromMysql = devDAO.getById(2L);
+            System.out.println(devFromMysql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         //Load all
-//        try {
-//            List<Company> companies = companyDAO.getAll();
-//            companies.stream().forEach(company -> System.out.println(company));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            List<Developer> developers = devDAO.getAll();
+            developers.stream().forEach(dev -> System.out.println(dev));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         //Upload
-//        try {
-//            projectDAO.update(new Project(1L,"new project", new BigDecimal(245)));
-//            System.out.println(projectDAO.getById(1L));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Developer updateDeveloper = new Developer("Petr", "Petrov", "super user", new BigDecimal(4000));
+            updateDeveloper.setId(1L);
+            devDAO.update(updateDeveloper);
+            System.out.println(devDAO.getById(1L));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         //Delete
-//        try {
-//            devDAO.delete(new Developer().withId(100L));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            devDAO.delete(new Developer().withId(1L));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

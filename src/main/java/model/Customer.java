@@ -13,14 +13,14 @@ import java.util.Set;
 public class Customer {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column (name = "firstName", nullable = false)
+    @Column (name = "first_name", nullable = false)
     private String firstName;
 
-    @Column (name = "lastName", nullable = false)
+    @Column (name = "last_name", nullable = false)
     private String lastName;
 
 

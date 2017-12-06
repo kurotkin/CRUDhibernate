@@ -9,6 +9,9 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">ab123</property>
 
+        <!--<property name="hibernate.hbm2ddl.auto">create</property>-->
+
+
         <mapping class="model.Company"></mapping>
         <mapping class="model.Customer"></mapping>
         <mapping class="model.Developer"></mapping>
