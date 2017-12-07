@@ -31,12 +31,13 @@ public class HSkillDAO implements SkillDAO {
     }
 
     @Override
-    public void save(Skill val) {
+    public Long save(Skill val) {
         Session session = this.sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(val);
+        Long id = (Long) session.save(val);
         transaction.commit();
         session.close();
+        return id;
     }
 
     @Override

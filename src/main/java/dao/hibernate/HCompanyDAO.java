@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class HCompanyDAO implements CompanyDAO {
@@ -23,6 +24,18 @@ public class HCompanyDAO implements CompanyDAO {
     }
 
     @Override
+    public Company getByName(String name) {
+        Company company = null;
+        Session session = this.sessionFactory.openSession();
+        String query = "select c from Company c where c.name like :name";
+        List<Company> companies = session.createQuery(query).setParameter("name", name).list();
+        if (companies.size() != 0) {
+            company = companies.get(0);
+        }
+        return company;
+    }
+
+    @Override
     public List<Company> getAll() {
         Session session = this.sessionFactory.openSession();
         Query query = session.createQuery("from Company");
@@ -32,12 +45,13 @@ public class HCompanyDAO implements CompanyDAO {
     }
 
     @Override
-    public void save(Company val) {
+    public Long save(Company val) {
         Session session = this.sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(val);
+        Long id = (Long) session.save(val);
         transaction.commit();
         session.close();
+        return id;
     }
 
     @Override

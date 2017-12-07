@@ -22,6 +22,18 @@ public class HCustomerDAO implements CustomerDAO{
     }
 
     @Override
+    public Customer getByName(String name) {
+        Customer customer = null;
+        Session session = this.sessionFactory.openSession();
+        String query = "select c from Customer c where c.name like :name";
+        List<Customer> companies = session.createQuery(query).setParameter("name", name).list();
+        if (companies.size() != 0) {
+            customer = companies.get(0);
+        }
+        return customer;
+    }
+
+    @Override
     public List<Customer> getAll() {
         Session session = this.sessionFactory.openSession();
         Query query = session.createQuery("from Customer");
@@ -31,12 +43,13 @@ public class HCustomerDAO implements CustomerDAO{
     }
 
     @Override
-    public void save(Customer val) {
+    public Long save(Customer val) {
         Session session = this.sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(val);
+        Long id = (Long) session.save(val);
         transaction.commit();
         session.close();
+        return id;
     }
 
     @Override

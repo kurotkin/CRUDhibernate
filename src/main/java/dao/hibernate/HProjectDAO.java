@@ -31,12 +31,13 @@ public class HProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public void save(Project val) {
+    public Long save(Project val) {
         Session session = this.sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(val);
+        Long id = (Long) session.save(val);
         transaction.commit();
         session.close();
+        return id;
     }
 
     @Override

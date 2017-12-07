@@ -31,12 +31,13 @@ public class HDeveloperDAO implements DeveloperDAO {
     }
 
     @Override
-    public void save(Developer val) {
+    public Long save(Developer val) {
         Session session = this.sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(val);
+        Long id = (Long) session.save(val);
         transaction.commit();
         session.close();
+        return id;
     }
 
     @Override
