@@ -22,6 +22,18 @@ public class HProjectDAO implements ProjectDAO {
     }
 
     @Override
+    public Project getByName(String name) {
+        Project project = null;
+        Session session = this.sessionFactory.openSession();
+        String query = "select c from Project c where c.name like :name";
+        List<Project> projectes = session.createQuery(query).setParameter("name", name).list();
+        if (projectes.size() != 0) {
+            project = projectes.get(0);
+        }
+        return project;
+    }
+
+    @Override
     public List<Project> getAll() {
         Session session = this.sessionFactory.openSession();
         Query query = session.createQuery("from Project");

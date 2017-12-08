@@ -12,57 +12,58 @@ public class HCompanyDAOTest {
 
     @Test
     public void save() throws Exception {
-        Company company = new Company("Company name");
+        String name = "Company name for save test";
+        Company company = new Company(name);
         companyDAO.save(company);
-        assertEquals(companyDAO.getByName("Company name"), company);
-        companyDAO.delete(companyDAO.getByName("Company name"));
+        assertEquals(companyDAO.getByName(name), company);
+        companyDAO.delete(companyDAO.getByName(name));
     }
 
     @Test
     public void findById() throws Exception {
-        Company company = new Company("companyForTestFindById");
+        Company company = new Company("Company name for id test");
         Long id = companyDAO.save(company);
-        assertEquals(companyDAO.findById(id), company);
+        assertEquals(companyDAO.getById(id), company);
         company.setId(id);
         companyDAO.delete(company);
-        assertEquals(new Company(id, ""), companyDAO.findById(id));
+        assertEquals(new Company(""), companyDAO.getById(id));
     }
 
     @Test
     public void update() throws Exception {
-        Company company = new Company(-1, "TestUpdate");
+        String name = "Company name for update test";
+        String NewName = "New Company name for update test";
+        Company company = new Company(name);
         Long id = companyDAO.save(company);
-        Company newCompany = new Company(id, "NewTestUpdate");
+        Company newCompany = new Company(NewName);
         companyDAO.update(newCompany);
-        assertEquals(new Company(0, "TestUpdate"), companyDAO.findByName("TestUpdate"));
-        assertEquals(newCompany, companyDAO.findByName("NewTestUpdate"));
-        companyDAO.delete(companyDAO.findByName("NewTestUpdate"));
-        Company anotherCompany = new Company(id + 100, "anotherCompany");
-        companyDAO.update(anotherCompany);
-        assertEquals(new Company(0, "anotherCompany"), companyDAO.findByName("anotherCompany"));
+        assertEquals(new Company("TestUpdate"), companyDAO.getByName("TestUpdate"));
+        assertEquals(newCompany, companyDAO.getByName(NewName));
+        companyDAO.delete(companyDAO.getByName(NewName));
     }
 
     @Test
     public void delete() throws Exception {
-        Company company = new Company(-1, "for test delete");
+        String name = "Company name for delete test";
+        Company company = new Company(name);
         companyDAO.delete(company);
         companyDAO.save(company);
-        assertEquals(company, companyDAO.findByName("for test delete"));
-        companyDAO.delete(companyDAO.findByName("for test delete"));
-        assertEquals(new Company(0, "for test delete"), companyDAO.findByName("for test delete"));
+        assertEquals(company, companyDAO.getByName(name));
+        companyDAO.delete(companyDAO.getByName(name));
+        assertEquals(new Company(name), companyDAO.getByName(name));
     }
 
     @Test
     public void findAll() throws Exception {
-        long listSizeBefore = companyDAO.findAll().size();
-        Company company1 = new Company(-1,"company1 for test findAll");
-        Company company2 = new Company(-1,"company2 for test findAll");
+        long listSizeBefore = companyDAO.getAll().size();
+        Company company1 = new Company("company1 for test findAll");
+        Company company2 = new Company("company2 for test findAll");
         companyDAO.save(company1);
         companyDAO.save(company2);
-        List<Company> listAfter = companyDAO.findAll();
+        List<Company> listAfter = companyDAO.getAll();
         assertTrue((listAfter.size() - listSizeBefore) == 2);
         assertTrue(listAfter.contains(company1) && listAfter.contains(company2));
-        companyDAO.delete(companyDAO.findByName("company1 for test findAll"));
-        companyDAO.delete(companyDAO.findByName("company2 for test findAll"));
+        companyDAO.delete(companyDAO.getByName("company1 for test findAll"));
+        companyDAO.delete(companyDAO.getByName("company2 for test findAll"));
     }
 }

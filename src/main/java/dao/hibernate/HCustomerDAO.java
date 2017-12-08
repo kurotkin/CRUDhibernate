@@ -25,10 +25,10 @@ public class HCustomerDAO implements CustomerDAO{
     public Customer getByName(String name) {
         Customer customer = null;
         Session session = this.sessionFactory.openSession();
-        String query = "select c from Customer c where c.name like :name";
-        List<Customer> companies = session.createQuery(query).setParameter("name", name).list();
-        if (companies.size() != 0) {
-            customer = companies.get(0);
+        String query = "select c from Customer c where c.lastName like :name";
+        List<Customer> customers = session.createQuery(query).setParameter("name", name).list();
+        if (customers.size() != 0) {
+            customer = customers.get(0);
         }
         return customer;
     }

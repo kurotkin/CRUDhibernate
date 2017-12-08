@@ -22,6 +22,19 @@ public class HSkillDAO implements SkillDAO {
     }
 
     @Override
+    public Skill getByName(String name) {
+        Skill skill = null;
+        Session session = this.sessionFactory.openSession();
+        String query = "select c from Skill c where c.name like :name";
+        List<Skill> skills = session.createQuery(query).setParameter("name", name).list();
+        if (skills.size() != 0) {
+            skill = skills.get(0);
+        }
+        return skill;
+    }
+
+
+    @Override
     public List<Skill> getAll() {
         Session session = this.sessionFactory.openSession();
         Query query = session.createQuery("from Skill");

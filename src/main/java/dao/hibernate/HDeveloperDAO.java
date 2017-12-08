@@ -22,6 +22,18 @@ public class HDeveloperDAO implements DeveloperDAO {
     }
 
     @Override
+    public Developer getByName(String name) {
+        Developer developer = null;
+        Session session = this.sessionFactory.openSession();
+        String query = "select c from Developer c where c.lastName like :name";
+        List<Developer> developers = session.createQuery(query).setParameter("name", name).list();
+        if (developers.size() != 0) {
+            developer = developers.get(0);
+        }
+        return developer;
+    }
+
+    @Override
     public List<Developer> getAll() {
         Session session = this.sessionFactory.openSession();
         Query query = session.createQuery("from Developer");
