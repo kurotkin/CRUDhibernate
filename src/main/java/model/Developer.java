@@ -31,21 +31,23 @@ public class Developer {
     private BigDecimal salary;
 
     @ManyToMany(cascade = {
-            CascadeType.ALL,
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH
+//            CascadeType.DETACH,
+//            CascadeType.MERGE,
+//            CascadeType.REFRESH,
+//            CascadeType.PERSIST,
+            CascadeType.ALL
     }, fetch = FetchType.EAGER)
-    @JoinTable(name = "developer_skill", joinColumns = {@JoinColumn(name = "developer_id")}, inverseJoinColumns = { @JoinColumn(name = "skill_id")} )
+    @JoinTable( name = "developer_skill",
+                joinColumns = {@JoinColumn(name = "developer_id")},
+                inverseJoinColumns = {@JoinColumn(name = "skill_id")} )
     private Set<Skill> skills = new HashSet<>();
 
     @ManyToMany(cascade = {
-            CascadeType.ALL,
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH
+//            CascadeType.DETACH,
+//            CascadeType.MERGE,
+//            CascadeType.REFRESH,
+//            CascadeType.PERSIST,
+            CascadeType.ALL
     }, fetch = FetchType.EAGER)
     @JoinTable( name = "developer_projects", joinColumns = {@JoinColumn(name = "developer_id")}, inverseJoinColumns = {@JoinColumn(name = "projects_id")} )
     private Set<Project> projects = new HashSet<>();

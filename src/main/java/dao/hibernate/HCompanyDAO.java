@@ -17,61 +17,82 @@ public class HCompanyDAO implements CompanyDAO {
 
     @Override
     public Company getById(Long id) {
-        Session session = this.sessionFactory.openSession();
-        Company company = session.get(Company.class, id);
-        session.close();
+        Company company = null;
+        try (Session session = this.sessionFactory.openSession()){
+            company = session.get(Company.class, id);
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return company;
     }
 
     @Override
     public Company getByName(String name) {
         Company company = null;
-        Session session = this.sessionFactory.openSession();
-        String query = "select c from Company c where c.name like :name";
-        List<Company> companies = session.createQuery(query).setParameter("name", name).list();
-        if (companies.size() != 0) {
-            company = companies.get(0);
+        try (Session session = this.sessionFactory.openSession()) {
+            String query = "select c from Company c where c.name like :name";
+            List<Company> companies = session.createQuery(query).setParameter("name", name).list();
+            if (companies.size() != 0) {
+                company = companies.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return company;
     }
 
     @Override
     public List<Company> getAll() {
-        Session session = this.sessionFactory.openSession();
-        Query query = session.createQuery("from Company");
-        List<Company> result = query.list();
-        session.close();
+        List<Company> result = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            Query query = session.createQuery("from Company");
+            result = query.list();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
     @Override
     public Long save(Company val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Long id = (Long) session.save(val);
-        transaction.commit();
-        session.close();
+        Long id = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            id = (Long) session.save(val);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return id;
     }
 
     @Override
     public void update(Company val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Company company = session.get(Company.class, val.getId());
-        company.setName(val.getName());
-        session.update(company);
-        transaction.commit();
-        session.close();
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Company company = session.get(Company.class, val.getId());
+            company.setName(val.getName());
+            session.update(company);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(Company val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Company company = session.get(Company.class, val.getId());
-        session.delete(company);
-        transaction.commit();
-        session.close();
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Company company = session.get(Company.class, val.getId());
+            session.delete(company);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

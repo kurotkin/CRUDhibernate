@@ -31,39 +31,38 @@ public class HCompanyDAOTest {
 
     @Test
     public void update() throws Exception {
-        String name = "Company name for update test";
-        String NewName = "New Company name for update test";
-        Company company = new Company(name);
+        Company company = new Company("Company name for update test");
         Long id = companyDAO.save(company);
-        Company newCompany = new Company(NewName);
+
+        Company newCompany = new Company("New Company name for update test").withId(id);
         companyDAO.update(newCompany);
-        assertEquals(new Company("TestUpdate"), companyDAO.getByName("TestUpdate"));
-        assertEquals(newCompany, companyDAO.getByName(NewName));
-        companyDAO.delete(companyDAO.getByName(NewName));
+
+        assertEquals(newCompany, companyDAO.getByName("New Company name for update test"));
+
+        companyDAO.delete(companyDAO.getByName("New Company name for update test"));
     }
 
     @Test
     public void delete() throws Exception {
         String name = "Company name for delete test";
         Company company = new Company(name);
-        companyDAO.delete(company);
-        companyDAO.save(company);
+        Long id = companyDAO.save(company);
         assertEquals(company, companyDAO.getByName(name));
-        companyDAO.delete(companyDAO.getByName(name));
-        assertEquals(new Company(name), companyDAO.getByName(name));
+        companyDAO.delete(companyDAO.getById(id));
+        assertEquals(null, companyDAO.getByName(name));
     }
 
     @Test
     public void findAll() throws Exception {
         long listSizeBefore = companyDAO.getAll().size();
-        Company company1 = new Company("company1 for test findAll");
-        Company company2 = new Company("company2 for test findAll");
+        Company company1 = new Company("Company1 for test findAll");
+        Company company2 = new Company("Company2 for test findAll");
         companyDAO.save(company1);
         companyDAO.save(company2);
         List<Company> listAfter = companyDAO.getAll();
         assertTrue((listAfter.size() - listSizeBefore) == 2);
         assertTrue(listAfter.contains(company1) && listAfter.contains(company2));
-        companyDAO.delete(companyDAO.getByName("company1 for test findAll"));
-        companyDAO.delete(companyDAO.getByName("company2 for test findAll"));
+        companyDAO.delete(companyDAO.getByName("Company1 for test findAll"));
+        companyDAO.delete(companyDAO.getByName("Company2 for test findAll"));
     }
 }

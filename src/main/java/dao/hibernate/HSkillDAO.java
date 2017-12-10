@@ -15,20 +15,27 @@ public class HSkillDAO implements SkillDAO {
 
     @Override
     public Skill getById(Long id) {
-        Session session = this.sessionFactory.openSession();
-        Skill skill = session.get(Skill.class, id);
-        session.close();
+        Skill skill = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            skill = session.get(Skill.class, id);
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return skill;
     }
 
     @Override
     public Skill getByName(String name) {
         Skill skill = null;
-        Session session = this.sessionFactory.openSession();
-        String query = "select c from Skill c where c.name like :name";
-        List<Skill> skills = session.createQuery(query).setParameter("name", name).list();
-        if (skills.size() != 0) {
-            skill = skills.get(0);
+        try (Session session = this.sessionFactory.openSession()) {
+            String query = "select c from Skill c where c.name like :name";
+            List<Skill> skills = session.createQuery(query).setParameter("name", name).list();
+            if (skills.size() != 0) {
+                skill = skills.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return skill;
     }
@@ -36,41 +43,55 @@ public class HSkillDAO implements SkillDAO {
 
     @Override
     public List<Skill> getAll() {
-        Session session = this.sessionFactory.openSession();
-        Query query = session.createQuery("from Skill");
-        List<Skill> result = query.list();
-        session.close();
+        List<Skill> result = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            Query query = session.createQuery("from Skill");
+            result = query.list();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
     @Override
     public Long save(Skill val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Long id = (Long) session.save(val);
-        transaction.commit();
-        session.close();
+        Long id = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+           id = (Long) session.save(val);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return id;
     }
 
     @Override
     public void update(Skill val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Skill skill = session.get(Skill.class, val.getId());
-        skill.setName(val.getName());
-        session.update(skill);
-        transaction.commit();
-        session.close();
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Skill skill = session.get(Skill.class, val.getId());
+            skill.setName(val.getName());
+            session.update(skill);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(Skill val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Skill skill = session.get(Skill.class, val.getId());
-        session.delete(skill);
-        transaction.commit();
-        session.close();
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Skill skill = session.get(Skill.class, val.getId());
+            session.delete(skill);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

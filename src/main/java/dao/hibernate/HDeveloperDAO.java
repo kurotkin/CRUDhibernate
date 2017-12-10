@@ -15,62 +15,83 @@ public class HDeveloperDAO implements DeveloperDAO {
 
     @Override
     public Developer getById(Long id) {
-        Session session = this.sessionFactory.openSession();
-        Developer developer = session.get(Developer.class, id);
-        session.close();
+        Developer developer = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            developer = session.get(Developer.class, id);
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return developer;
     }
 
     @Override
     public Developer getByName(String name) {
         Developer developer = null;
-        Session session = this.sessionFactory.openSession();
-        String query = "select c from Developer c where c.lastName like :name";
-        List<Developer> developers = session.createQuery(query).setParameter("name", name).list();
-        if (developers.size() != 0) {
-            developer = developers.get(0);
+        try (Session session = this.sessionFactory.openSession()) {
+            String query = "select c from Developer c where c.lastName like :name";
+            List<Developer> developers = session.createQuery(query).setParameter("name", name).list();
+            if (developers.size() != 0) {
+                developer = developers.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return developer;
     }
 
     @Override
     public List<Developer> getAll() {
-        Session session = this.sessionFactory.openSession();
-        Query query = session.createQuery("from Developer");
-        List<Developer> result = query.list();
-        session.close();
+        List<Developer> result = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            Query query = session.createQuery("from Developer");
+            result = query.list();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
     @Override
     public Long save(Developer val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Long id = (Long) session.save(val);
-        transaction.commit();
-        session.close();
+        Long id = null;
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            id = (Long) session.save(val);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return id;
     }
 
     @Override
     public void update(Developer val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Developer developer = session.get(Developer.class, val.getId());
-        developer.setFirstName(val.getFirstName());
-        developer.setLastName(val.getLastName());
-        session.update(developer);
-        transaction.commit();
-        session.close();
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Developer developer = session.get(Developer.class, val.getId());
+            developer.setFirstName(val.getFirstName());
+            developer.setLastName(val.getLastName());
+            session.update(developer);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(Developer val) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Developer developer = session.get(Developer.class, val.getId());
-        session.delete(developer);
-        transaction.commit();
-        session.close();
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Developer developer = session.get(Developer.class, val.getId());
+            session.delete(developer);
+            transaction.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
